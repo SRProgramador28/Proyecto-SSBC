@@ -1,38 +1,55 @@
-import PySimpleGUI as sg
+from ui_config import sg
 
-my_new_theme = {
-    'BACKGROUND': '#EFF6FF',   # Base-100: un fondo claro con un sutil tinte azulado
-    'TEXT': '#1F2937',         # Base-content: texto en un tono oscuro para buen contraste
-    'INPUT': '#E2E8F0',        # Base-200: fondo de los campos de entrada, un gris azulado muy suave
-    'TEXT_INPUT': '#1F2937',   # Texto en los inputs, usando el color base-content oscuro
-    'SCROLL': '#E2E8F0',       # Mantiene la coherencia con el fondo de INPUT
-    'BUTTON': ('white', '#1FB6FF'),  # Botón primario: fondo azul vibrante y texto blanco
-    'PROGRESS': ('#1FB6FF', '#CBD5E1'),  # Barra de progreso en tonos que combinan con el botón y el fondo
-    'BORDER': 1,
-    'SLIDER_DEPTH': 0,
-    'PROGRESS_DEPTH': 0
-}
-
-sg.theme_add_new('MyNewTheme', my_new_theme)
-
+# Definición de la interfaz principal del sistema
 def main_interface():
-    sg.theme('My New Theme')
     layout = [
-        [sg.Text("Sistema Principal SP", font=("Helvetica", 20), justification='center', background_color=sg.theme_background_color())],
-        [[sg.Image(sg.EMOJI_BASE64_READING)]],
-        [sg.Button("Registro Nuevo", font=("Helvetica", 12), size=(20, 1))],
-        [sg.Button("Registrar Cita", font=("Helvetica", 12), size=(20, 1))],
-        [sg.Button("Cerrar Sesión", font=("Helvetica", 12), size=(20, 1))]
+        # Primera fila con el texto y el botón de Cerrar Sesión en la parte superior derecha
+        [
+            sg.Text("Sistema Experto Diagnóstico", font=("Helvetica", 20), justification='center', expand_x=True),
+            sg.Push(),
+            sg.Button("Cerrar Sesión", button_color=('white', '#FF5555'), size=(12, 1))
+        ],
+        # Segunda fila con el TabGroup
+        [
+            sg.TabGroup(
+                [[
+                    sg.Tab("Gestión de Pacientes", [
+                        [sg.Button("Registrar Paciente", expand_x=True)],
+                        [sg.Button("Editar Paciente", expand_x=True)],
+                        [sg.Button("Buscar Paciente", expand_x=True)],
+                        [sg.Button("Listar Pacientes", expand_x=True)]
+                    ], expand_x=True, expand_y=True),
+
+                    sg.Tab("Gestión de Citas", [
+                        [sg.Button("Nueva Cita", expand_x=True)],
+                        [sg.Button("Editar Cita", expand_x=True)],
+                        [sg.Button("Buscar Citas", expand_x=True)]
+                    ], expand_x=True, expand_y=True),
+
+                    sg.Tab("Gestión de Usuarios", [
+                        [sg.Button("Nuevo Usuario", expand_x=True)],
+                        [sg.Button("Editar Usuario", expand_x=True)]
+                    ], expand_x=True, expand_y=True)
+                ]],
+                expand_x=True,
+                expand_y=True,
+                tab_location='top',
+                title_color='black',
+                selected_title_color='black',
+                border_width=2
+            )
+        ]
     ]
-    return sg.Window("Interfaz Principal", layout, size=(600, 400), element_justification='c', background_color=sg.theme_background_color(), finalize=True)
+
+    return sg.Window("Interfaz Principal", layout, size=(800, 600), resizable=True, element_justification='center', finalize=True)
 
 # BLOQUE PARA PRUEBAS
-
+"""
 if __name__ == "__main__":
     window = main_interface()
     while True:
         event, values = window.read()
         if event in (sg.WIN_CLOSED, "Salir"):
             break
-    window.close()
+    window.close()"""
 # FIN DEL BLOQUE PARA PRUEBAS

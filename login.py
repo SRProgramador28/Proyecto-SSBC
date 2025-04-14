@@ -1,5 +1,6 @@
-import PySimpleGUI as sg
+from ui_config import sg
 
+# Definición de la interfaz para iniciar sesión
 def login_interface():
     sg.theme('My New Theme')
     layout = [
@@ -14,12 +15,12 @@ def login_interface():
     return sg.Window("Login", layout, size=(400, 300), element_justification='c', background_color=sg.theme_background_color())
 
 # BLOQUE PARA PRUEBAS
-
+"""
 if __name__ == "__main__":
     window = login_interface()
     while True:
         event, values = window.read()
         if event in (sg.WIN_CLOSED, "Salir"):
             break
-    window.close() 
+    window.close()"""
 # FIN DEL BLOQUE PARA PRUEBAS
