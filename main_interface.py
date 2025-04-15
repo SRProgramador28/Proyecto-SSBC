@@ -5,7 +5,7 @@ def main_interface():
     layout = [
         # Primera fila con el texto y el botón de Cerrar Sesión en la parte superior derecha
         [
-            sg.Text("Sistema Experto Diagnóstico", font=("Helvetica", 20), justification='center', expand_x=True),
+            sg.Text("Sistema Experto de Diagnóstico", font=("Helvetica", 20), justification='center', expand_x=True),
             sg.Push(),
             sg.Button("Cerrar Sesión", button_color=('white', '#FF5555'), size=(12, 1))
         ],
@@ -29,7 +29,15 @@ def main_interface():
                     sg.Tab("Gestión de Usuarios", [
                         [sg.Button("Nuevo Usuario", expand_x=True)],
                         [sg.Button("Editar Usuario", expand_x=True)]
+                    ], expand_x=True, expand_y=True),
+                    
+                    sg.Tab("Sistema de Diagnóstico", [
+                        [sg.Button("Consulta", expand_x=True)],
+                        [sg.Button("Revisión", expand_x=True)],
+                        [sg.Button("Pruebas de Laboratorio", expand_x=True)],
+                        [sg.Button("Pruebas Post Mortem", expand_x=True)]
                     ], expand_x=True, expand_y=True)
+
                 ]],
                 expand_x=True,
                 expand_y=True,
@@ -51,5 +59,5 @@ if __name__ == "__main__":
         event, values = window.read()
         if event in (sg.WIN_CLOSED, "Salir"):
             break
-    window.close()"""
+    window.close()#"""
 # FIN DEL BLOQUE PARA PRUEBAS
