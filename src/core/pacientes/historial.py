@@ -23,12 +23,12 @@ def historial_interface():
     return sg.Window("Historial Médico", layout, size=(650, 500), element_justification='c', finalize=True)
 
 # BLOQUE PARA PRUEBAS
-
+"""
 if __name__ == "__main__":
     window = historial_interface()
     while True:
         event, values = window.read()
         if event in (sg.WIN_CLOSED, "Salir"):
             break
-    window.close() 
+    window.close()"""
 # FIN DEL BLOQUE PARA PRUEBAS
