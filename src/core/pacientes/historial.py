@@ -1,8 +1,5 @@
-import PySimpleGUI as sg
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from ui_config import sg
+from database.singleton import DatabaseManagerSingleton
 
 # Definición de la interfaz para el historial médico
 def historial_interface():
@@ -20,15 +17,42 @@ def historial_interface():
         [sg.Button("Volver", size=(20, 1))]
     ]
     
-    return sg.Window("Historial Médico", layout, size=(650, 500), element_justification='c', finalize=True)
+    window = sg.Window("Historial Médico", layout, size=(650, 500), element_justification='center', finalize=True)
+    db = DatabaseManagerSingleton.get_instance()
 
-# BLOQUE PARA PRUEBAS
-"""
-if __name__ == "__main__":
-    window = historial_interface()
     while True:
         event, values = window.read()
-        if event in (sg.WIN_CLOSED, "Salir"):
+        if event in (sg.WIN_CLOSED, "Volver"):
             break
-    window.close()"""
-# FIN DEL BLOQUE PARA PRUEBAS
+
+        elif event == "Guardar Consulta":
+            id_paciente = values["-IDPACIENTE-"]
+            id_doctor = values["-IDDOCTOR-"]
+            diagnostico = values["-DIAGNOSTICO-"]
+            tratamiento = values["-TRATAMIENTO-"]
+            observaciones = values["-OBSERVACIONES-"]
+            estado = values["-ESTADO-"]
+
+            if not id_paciente or not id_doctor or not diagnostico or not estado:
+                sg.popup("Error", "Los campos ID Paciente, ID Doctor, Diagnóstico y Estado son obligatorios.")
+                continue
+
+            try:
+                query = """
+                    INSERT INTO historial_consultas (
+                        id_paciente, id_doctor, diagnostico, tratamiento, observaciones, estado
+                    ) VALUES (%s, %s, %s, %s, %s, %s)
+                """
+                db.execute_query(query, (
+                    id_paciente, id_doctor, diagnostico, tratamiento, observaciones, estado
+                ))
+                sg.popup("Consulta guardada exitosamente", title="Éxito")
+                # Limpiar campos después del guardado
+                for key in ["-IDPACIENTE-", "-IDDOCTOR-", "-DIAGNOSTICO-", "-TRATAMIENTO-", "-OBSERVACIONES-"]:
+                    window[key].update("")
+                window["-ESTADO-"].update("Abierta")
+            except Exception as e:
+                sg.popup(f"Error al guardar consulta: {e}", title="Error")
+
+    window.close()
+    db.close()

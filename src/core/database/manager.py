@@ -9,6 +9,7 @@ class DatabaseManager:
         self.database = database
         self.port = port
         self.connection = None
+        self.connect()
 
     def init_schema(self):
         try:
@@ -26,21 +27,23 @@ class DatabaseManager:
             print("El archivo schema.sql no se encontró")
 
     def connect(self):
+        if self.connection and self.connection.is_connected():
+            return
         try:
             self.connection = mysql.connector.connect(
                 host=self.host,
+                port=self.port,
                 user=self.user,
                 password=self.password,
                 database=self.database
             )
-            if self.connection.is_connected():
-                print("Conección exitosa")
+            print("Conexión exitosa")
         except Error as e:
-            print(f"Error: {e}")
+            print(f"Error al conectar: {e}")
             self.connection = None
 
     def close(self):
-        if self.connection.is_connected():
+        if self.connection and self.connection.is_connected():
             self.connection.close()
             print("Database connection closed")
 

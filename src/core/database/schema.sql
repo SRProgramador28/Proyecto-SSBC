@@ -1,7 +1,7 @@
 -- Tabla de Usuarios
 CREATE TABLE IF NOT EXISTS usuarios (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(50) NOT NULL
+    nombre VARCHAR(50) NOT NULL,
     usuario VARCHAR(30) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
     rol ENUM('Administrador', 'Usuario') NOT NULL,

@@ -1,9 +1,6 @@
-import PySimpleGUI as sg
-from datetime import datetime
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from ui_config import sg
+from database.singleton import DatabaseManagerSingleton
+from datetime import datetime
 
 # Definición de la interfaz para el registro de citas
 def cita_interface():
@@ -24,13 +21,3 @@ def cita_interface():
     return sg.Window("Registro de Citas", layout, size=(650, 600), finalize=True)
 
 
-# BLOQUE PARA PRUEBAS
-"""
-if __name__ == "__main__":
-    window = cita_interface()
-    while True:
-        event, values = window.read()
-        if event in (sg.WIN_CLOSED, "Salir"):
-            break
-    window.close()"""
-# FIN DEL BLOQUE PARA PRUEBAS

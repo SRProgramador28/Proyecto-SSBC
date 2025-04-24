@@ -28,7 +28,9 @@ def main_interface():
 
                     sg.Tab("Gestión de Usuarios", [
                         [sg.Button("Nuevo Usuario", expand_x=True)],
-                        [sg.Button("Editar Usuario", expand_x=True)]
+                        [sg.Button("Editar Usuario", expand_x=True)],
+                        [sg.Button("Nuevo Doctor", expand_x=True)],
+                        [sg.Button("Editar Doctor", expand_x=True)]
                     ], expand_x=True, expand_y=True),
                     
                     sg.Tab("Sistema de Diagnóstico", [
@@ -50,14 +52,3 @@ def main_interface():
     ]
 
     return sg.Window("Interfaz Principal", layout, size=(800, 600), resizable=True, element_justification='center', finalize=True)
-
-# BLOQUE PARA PRUEBAS
-"""
-if __name__ == "__main__":
-    window = main_interface()
-    while True:
-        event, values = window.read()
-        if event in (sg.WIN_CLOSED, "Salir"):
-            break
-    window.close()#"""
-# FIN DEL BLOQUE PARA PRUEBAS

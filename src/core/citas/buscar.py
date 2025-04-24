@@ -1,8 +1,5 @@
-import PySimpleGUI as sg
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from ui_config import sg
+from database.singleton import DatabaseManagerSingleton
 
 # Definición de la interfaz para buscar citas
 def buscar_cita_interface():
@@ -16,13 +13,3 @@ def buscar_cita_interface():
     ]
     return sg.Window("Buscar Cita", layout, size=(600, 400), element_justification='c', finalize=True)
 
-# BLOQUE PARA PRUEBAS
-"""
-if __name__ == "__main__":
-    window = buscar_cita_interface()
-    while True:
-        event, values = window.read()
-        if event in (sg.WIN_CLOSED, "Salir"):
-            break
-    window.close()"""
-# FIN DEL BLOQUE PARA PRUEBAS
