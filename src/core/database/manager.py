@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
+import os
 
 class DatabaseManager:
     def __init__(self, host, user, password, database, port):
@@ -13,7 +14,8 @@ class DatabaseManager:
 
     def init_schema(self):
         try:
-            with open("src/core/database/schema.sql", "r") as file:
+            schema_file = os.path.join(os.path.dirname(__file__), "schema.sql")
+            with open(schema_file, "r") as file:
                 sql_commands = file.read().split(";")
 
                 for command in sql_commands:
@@ -21,10 +23,13 @@ class DatabaseManager:
                         self.execute_query(command.strip())
 
                 print("Schema inicializado correctamente")
+                return True
         except Error as e:
             print(f"Error al inicializar el esquema: {e}")
+            return False
         except FileNotFoundError:
             print("El archivo schema.sql no se encontró")
+            return False
 
     def connect(self):
         if self.connection and self.connection.is_connected():
@@ -41,11 +46,12 @@ class DatabaseManager:
         except Error as e:
             print(f"Error al conectar: {e}")
             self.connection = None
+            return False
 
     def close(self):
         if self.connection and self.connection.is_connected():
             self.connection.close()
-            print("Database connection closed")
+            print("Conexión cerrada")
 
     def execute_query(self, query, params=None, fetch="all"):
         if not self.connection or not self.connection.is_connected():
