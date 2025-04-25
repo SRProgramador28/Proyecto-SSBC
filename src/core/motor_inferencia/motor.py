@@ -9,5 +9,9 @@ class MotorInferencia:
         self.prolog.consult("base_de_conocimientos.pl")
 
     def diagnostico(self, sintomas):
-        diagnostico = None
+        for sintoma in sintomas:
+            self.prolog.assertz(f"sintoma({sintoma})")
+
+        diagnostico = list(self.prolog.query(""))
+
         return diagnostico
