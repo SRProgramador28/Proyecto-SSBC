@@ -1,33 +1,84 @@
-import PySimpleGUI as sg
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from ui_config import sg
+from database.singleton import DatabaseManagerSingleton
 
 # Definición de la interfaz para editar citas
 def editar_cita_interface():
+    sg.theme('My New Theme')
+    db = DatabaseManagerSingleton.get_instance()
+
     layout = [
-        [sg.Text("Modificar Cita", font=("Helvetica", 20))],
-        [sg.Text("Código de la cita", font=("Helvetica", 12))],
-        [sg.Input(key="-CITA_ID-", font=("Arial", 12), size=(30, 1))],
-        [sg.Button("Buscar", font=("Helvetica", 12))],
-        [sg.Text("Nombre", font=("Helvetica", 12))],
-        [sg.Input(key="-NAME-", font=("Arial", 12), size=(30, 1))],
-        [sg.Text("Apellido", font=("Helvetica", 12))],
-        [sg.Input(key="-LASTNAME-", font=("Arial", 12), size=(30, 1))],
-        [sg.Text("Fecha de cita", font=("Helvetica", 12))],
-        [sg.Input(key="-DATE-", font=("Arial", 12), size=(30, 1))],
+        [sg.Text("Modificar Cita", font=("Helvetica", 20), justification="center", expand_x=True)],
+        [sg.Text("Código de la Cita", size=(20, 1)), sg.Input(key="-CITA_ID-", size=(30, 1)), sg.Button("Buscar", size=(10,1))],
+        [sg.HorizontalSeparator()],
+        
+        [sg.Text("Fecha de Cita", size=(20, 1)), sg.Input(key="-FECHA-", size=(30, 1))],
+        [sg.Text("Motivo de la Cita", size=(20, 1)), sg.Multiline(key="-MOTIVO-", size=(40, 3))],
+        [sg.Text("Observaciones", size=(20, 1)), sg.Multiline(key="-OBSERVACIONES-", size=(40, 3))],
+        [sg.Text("Estado", size=(20, 1)), sg.Combo(["Pendiente", "Confirmada", "Cancelada", "Reprogramada", "Completada"], key="-ESTADO-", size=(30,1))],
+
         [sg.Button("Guardar Cambios", size=(20, 1)), sg.Button("Volver", size=(20, 1))]
     ]
-    return sg.Window("Editar Cita", layout, size=(600, 500), element_justification='c', finalize=True)
 
-# BLOQUE PARA PRUEBAS
-"""
-if __name__ == "__main__":
-    window = editar_cita_interface()
+    window = sg.Window("Editar Cita", layout, size=(650, 550), finalize=True)
+
+    cita_actual = None
+
     while True:
         event, values = window.read()
-        if event in (sg.WIN_CLOSED, "Salir"):
+        if event in (sg.WIN_CLOSED, "Volver"):
             break
-    window.close()"""
-# FIN DEL BLOQUE PARA PRUEBAS
+
+        elif event == "Buscar":
+            cita_id = values["-CITA_ID-"]
+            if not cita_id:
+                sg.popup("Ingrese el código de la cita para buscar.")
+                continue
+
+            try:
+                query = "SELECT * FROM citas WHERE id_cita = %s"
+                result = db.fetch_one(query, (cita_id,))
+                if result:
+                    cita_actual = result
+                    window["-FECHA-"].update(value=result['fecha_hora'].strftime('%Y-%m-%d %H:%M:%S'))
+                    window["-MOTIVO-"].update(value=result['motivo'] or "")
+                    window["-OBSERVACIONES-"].update(value=result['observaciones'] or "")
+                    window["-ESTADO-"].update(value=result['estado'])
+                else:
+                    sg.popup("No se encontró una cita con ese código.")
+            except Exception as e:
+                sg.popup_error(f"Error al buscar la cita: {e}")
+
+        elif event == "Guardar Cambios":
+            if not cita_actual:
+                sg.popup("Primero busque una cita para modificar.")
+                continue
+
+            nueva_fecha = values["-FECHA-"]
+            nuevo_motivo = values["-MOTIVO-"]
+            nuevas_observaciones = values["-OBSERVACIONES-"]
+            nuevo_estado = values["-ESTADO-"]
+
+            if not all([nueva_fecha, nuevo_estado]):
+                sg.popup("Debe llenar los campos obligatorios (Fecha y Estado).")
+                continue
+
+            try:
+                update_query = """
+                UPDATE citas
+                SET fecha_hora = %s, motivo = %s, observaciones = %s, estado = %s
+                WHERE id_cita = %s
+                """
+                filas = db.execute_query(update_query, (
+                    nueva_fecha, nuevo_motivo, nuevas_observaciones, nuevo_estado, cita_actual['id_cita']
+                ))
+                if filas:
+                    sg.popup("Cita actualizada exitosamente.", title="Éxito")
+                    # Limpiar formulario después de guardar
+                    for key in ("-CITA_ID-", "-FECHA-", "-MOTIVO-", "-OBSERVACIONES-", "-ESTADO-"):
+                        window[key].update("")
+                    cita_actual = None
+            except Exception as e:
+                sg.popup_error(f"Error al actualizar la cita: {e}")
+
+    window.close()
+    db.close()

@@ -1,7 +1,5 @@
-import PySimpleGUI as sg
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from ui_config import sg
+from database.singleton import DatabaseManagerSingleton
 
 # Definición de la interfaz para el formulario de consulta
 def consulta_interface():
@@ -18,15 +16,53 @@ def consulta_interface():
         
         [sg.Button("Guardar Consulta", size=(20, 1)), sg.Button("Volver", size=(20, 1))]
     ]
-    return sg.Window("Formulario de Consulta", layout, size=(600, 500), finalize=True)
+    window = sg.Window("Formulario de Consulta", layout, size=(600, 500), finalize=True)
+    db = DatabaseManagerSingleton.get_instance()
 
-# BLOQUE PARA PRUEBAS
-#"""
-if __name__ == "__main__":
-    window = consulta_interface()
     while True:
         event, values = window.read()
-        if event in (sg.WIN_CLOSED, "Salir"):
+        if event in (sg.WIN_CLOSED, "Volver"):
             break
-    window.close()#"""
-# FIN DEL BLOQUE PARA PRUEBAS
+
+        elif event == "Guardar Consulta":
+            id_paciente = values["-ID_PACIENTE-"]
+            id_doctor = values["-ID_DOCTOR-"]
+            diagnostico = values["-DIAGNOSTICO-"]
+            tratamiento = values["-TRATAMIENTO-"]
+            observaciones = values["-OBSERVACIONES-"]
+            estado = values["-ESTADO-"]
+
+            # Validar campos
+            if not id_paciente or not id_doctor or not diagnostico or not estado:
+                sg.popup("Error", "Por favor, complete los campos obligatorios.")
+                continue
+
+            try:
+                # Verificar si el paciente y el doctor existen
+                paciente_query = "SELECT 1 FROM pacientes WHERE id_paciente = %s"
+                doctor_query = "SELECT 1 FROM doctores WHERE id_doctor = %s"
+                if not db.execute_query(paciente_query, (id_paciente,), fetch="one"):
+                    sg.popup("Error", f"No se encontró un paciente con ID {id_paciente}.")
+                    continue
+                if not db.execute_query(doctor_query, (id_doctor,), fetch="one"):
+                    sg.popup("Error", f"No se encontró un doctor con ID {id_doctor}.")
+                    continue
+
+                # Insertar
+                query = """
+                    INSERT INTO consultas (id_paciente, id_doctor, diagnostico, tratamiento, observaciones, estado)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """
+                db.execute_query(query, (id_paciente, id_doctor, diagnostico, tratamiento, observaciones, estado))
+                sg.popup("Consulta guardada exitosamente", title="Éxito")
+
+                # Limpiar los campos después de guardar
+                for key in ["-ID_PACIENTE-", "-ID_DOCTOR-", "-DIAGNOSTICO-", "-TRATAMIENTO-", "-OBSERVACIONES-"]:
+                    window[key].update("")
+                window["-ESTADO-"].update("Abierta")
+
+            except Exception as e:
+                sg.popup(f"Error al guardar la consulta: {e}", title="Error")
+
+    window.close()
+    db.close()
