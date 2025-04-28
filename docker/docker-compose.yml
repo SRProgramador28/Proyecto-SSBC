@@ -7,7 +7,7 @@ services:
     ports:
       - "3306:3306"
     env_file:
-      - ../config/.env.example
+      - ../config/.env
     volumes:
       - mysql_data:/var/lib/mysql
       - ./src/core/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
