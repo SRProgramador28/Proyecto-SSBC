@@ -10,5 +10,10 @@ todos_sintomas_presentes([Sintoma|Resto]) :-
     sintoma(Sintoma),
     todos_sintomas_presentes(Resto).
 
+% Diagnóstico y el tratamiento
+diagnostico_con_tratamiento(Enfermedad, Tratamientos) :-
+    diagnostico(Enfermedad),
+    tratamiento(Enfermedad, Tratamientos).
+
 
 

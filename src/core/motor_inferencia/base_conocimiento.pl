@@ -2,6 +2,7 @@
 :- [reglas/sintomas].
 :- [reglas/enfermedades].
 :- [reglas/diagnostico].
+:- [reglas/tratamientos].
 
 % Hechos
 gravedad(leve).
