@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 from login import login_interface
 from main_interface import main_interface
+from database.singleton import DatabaseManagerSingleton
 
 # Módulos de pacientes
 from pacientes.registro import registro_interface
@@ -34,6 +35,27 @@ def handle_login(window):
         password = values["-PASSWORD-"]
         if usercode == "1" and password == "1":
             return "main", main_interface()
+        
+        if not all([usercode, password]):
+            sg.popup("Error", "Por favor, complete los campos obligatorios.")
+        try:
+            # Consulta a la base de datos para verificar el usuario y la contraseña
+            query = """
+            SELECT * FROM usuarios WHERE usuario = %s AND password = %s
+            """
+            db = DatabaseManagerSingleton.get_instance()
+            filas = db.execute_query(query, (usercode, password))
+            # Aquí iría la lógica de autenticación real
+            if usercode == "admin" and password == "admin":
+                sg.popup("Bienvenido Admistrador")
+                return "main", main_interface()
+            elif filas:
+                sg.popup(f"Bienvenido Doctor {usercode}!")
+                return "main", main_interface()
+            else:
+                sg.popup("Error", "Usuario o contraseña incorrectos.")
+        except Exception as e:
+            sg.popup(f"Error al iniciar sesión: {e}", title="Error")
     return "login", window
 
 
