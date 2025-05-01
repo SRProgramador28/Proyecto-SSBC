@@ -9,7 +9,7 @@ def doctores_interface():
         
         [sg.Text("Nombre del Doctor", size=(20, 1)), sg.Input(key="-NOMBRE-", size=(30, 1))],
         [sg.Text("Especialidad", size=(20, 1)), sg.Input(key="-ESPECIALIDAD-", size=(30, 1))],
-        [sg.Text("ID de Usuario Vinculado", size=(20, 1)), sg.Input(key="-IDUSUARIO-", size=(30, 1))],
+        [sg.Text("ID de Usuario Vinculado", size=(20, 1)), sg.Input(key="-ID-USUARIO-", size=(30, 1))],
         
         [sg.Button("Registrar Doctor", size=(20, 1)), sg.Button("Volver", size=(20, 1))]
     ]
@@ -17,10 +17,14 @@ def doctores_interface():
     window = sg.Window("Gestión de Doctores", layout, size=(600, 400), element_justification='c', finalize=True)
     db = DatabaseManagerSingleton.get_instance()
 
-    def usuario(id_usuario):
-        query = "SELECT 1 FROM usuarios WHERE id = %s LIMIT 1"
-        resultado = db.execute_query(query, params=(id_usuario,), fetch="one")
-        return bool(resultado)
+    def buscar_usuario(id_usuario):
+        try:
+            query = "SELECT id_usuario FROM usuarios WHERE id_usuario = %s"
+            resultado = db.execute_query(query, (id_usuario,))
+            if resultado:
+                return resultado[0][0]
+        except Exception as e:
+            sg.popup(f"Error al buscar usuario: {str(e)}")
 
     while True:
         event, values = window.read()
@@ -30,15 +34,14 @@ def doctores_interface():
         elif event == "Registrar Doctor":
             nombre = values["-NOMBRE-"]
             especialidad = values["-ESPECIALIDAD-"]
-            id_usuario = values["-IDUSUARIO-"]
+            id_usuario = values["-ID-USUARIO-"]
 
             if not nombre or not especialidad or not id_usuario:
                 sg.popup("Error", "Todos los campos son obligatorios.")
                 continue
 
-            # Verificar que el ID de usuario exista
-            if not usuario(id_usuario):
-                sg.popup("Error", f"No se encontró un usuario con ID {id_usuario}.")
+            if not buscar_usuario(id_usuario):
+                sg.popup("Error", "ID de usuario no encontrado.")
                 continue
 
             try:
@@ -49,9 +52,8 @@ def doctores_interface():
                 db.execute_query(query, (nombre, especialidad, id_usuario))
                 sg.popup("Doctor registrado exitosamente", title="Éxito")
                 
-                for key in ["-NOMBRE-", "-ESPECIALIDAD-", "-IDUSUARIO-"]:
+                for key in ["-NOMBRE-", "-ESPECIALIDAD-", "-ID-USUARIO-"]:
                     window[key].update("")
-
             except Exception as e:
                 sg.popup(f"Error al registrar doctor: {e}", title="Error")
 
