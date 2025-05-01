@@ -17,7 +17,8 @@ def main_interface():
                         [sg.Button("Registrar Paciente", expand_x=True)],
                         [sg.Button("Editar Paciente", expand_x=True)],
                         [sg.Button("Buscar Paciente", expand_x=True)],
-                        [sg.Button("Listar Pacientes", expand_x=True)]
+                        [sg.Button("Listar Pacientes", expand_x=True)],
+                        [sg.Button("Historial Paciente", expand_x=True)]
                     ], expand_x=True, expand_y=True),
 
                     sg.Tab("Gestión de Citas", [

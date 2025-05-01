@@ -8,6 +8,7 @@ from pacientes.registro import registro_interface
 from pacientes.editar import editar_paciente_interface
 from pacientes.buscar import buscar_paciente_interface
 from pacientes.listar import listar_paciente_interface
+from pacientes.historial import historial_interface
 
 # Módulos de citas
 from citas.cita import cita_interface
@@ -33,8 +34,6 @@ def handle_login(window):
     if event == "Iniciar Sesión":
         usercode = values["-USERCODE-"]
         password = values["-PASSWORD-"]
-        if usercode == "1" and password == "1":
-            return "main", main_interface()
         
         if not all([usercode, password]):
             sg.popup("Error", "Por favor, complete los campos obligatorios.")
@@ -46,7 +45,7 @@ def handle_login(window):
             db = DatabaseManagerSingleton.get_instance()
             filas = db.execute_query(query, (usercode, password))
             # Aquí iría la lógica de autenticación real
-            if usercode == "admin" and password == "admin":
+            if usercode == "1" and password == "1":
                 sg.popup("Bienvenido Admistrador")
                 return "main", main_interface()
             elif filas:
@@ -71,6 +70,7 @@ def handle_main(window):
         "Editar Paciente": ("editar_paciente", editar_paciente_interface),
         "Buscar Paciente": ("buscar", buscar_paciente_interface),
         "Listar Pacientes": ("listar", listar_paciente_interface),
+        "Historial Paciente": ("historial", historial_interface),
         "Nueva Cita": ("cita", cita_interface),
         "Editar Cita": ("editar_cita", editar_cita_interface),
         "Buscar Citas": ("buscar_citas", buscar_cita_interface),
@@ -109,6 +109,7 @@ def main():
         "editar_paciente": lambda w: handle_generic(w, "main"),
         "buscar": lambda w: handle_generic(w, "main"),
         "listar": lambda w: handle_generic(w, "main"),
+        "historial": lambda w: handle_generic(w, "main"),
         "cita": lambda w: handle_generic(w, "main"),
         "editar_cita": lambda w: handle_generic(w, "main"),
         "buscar_citas": lambda w: handle_generic(w, "main"),
