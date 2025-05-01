@@ -31,7 +31,9 @@ def buscar_paciente_interface():
             resultados = db.execute_query(query, params=(f"%{criterio}%",))
 
             if resultados:
-                texto_resultado = "\n".join([f"ID: {r[0]}, Nombre: {r[1]}, Apellido: {r[2]}" for r in resultados])
+                texto_resultado = "\n".join([
+                    f"ID: {r[0]} \nNombre: {r[1]} \nApellido: {r[2]} \nEdad: {r[3]} \nSexo: {r[4]} \nAltura: {r[6]} \nGrupo Sanguineo: {r[7]} \nAlergias: {r[8]} \nEnfermedades Cronicas: {r[9]}"
+                for r in resultados])
             else:
                 texto_resultado = "No se encontraron pacientes con ese nombre."
             window["-RESULTADO-"].update(texto_resultado)
