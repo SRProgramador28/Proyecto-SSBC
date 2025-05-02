@@ -6,17 +6,17 @@ def consulta_interface():
     sg.theme('MyNewTheme')
     layout = [
         [sg.Text("Formulario de Consulta", font=("Helvetica", 18))],
-
-        [sg.Text("ID Paciente", size=(15, 1)), sg.Input(key="-ID_PACIENTE-")],
-        [sg.Text("ID Doctor", size=(15, 1)), sg.Input(key="-ID_DOCTOR-")],
-        [sg.Text("Diagnóstico Provisional", size=(15, 1)), sg.Multiline(key="-DIAGNOSTICO-", size=(40, 3))],
-        [sg.Text("Tratamiento Prescrito", size=(15, 1)), sg.Multiline(key="-TRATAMIENTO-", size=(40, 3))],
-        [sg.Text("Observaciones", size=(15, 1)), sg.Multiline(key="-OBSERVACIONES-", size=(40, 3))],
-        [sg.Text("Estado de Consulta", size=(15, 1)), sg.Combo(["Abierta", "En proceso", "Cerrada"], key="-ESTADO-", default_value="Abierta")],
-        
+        [sg.Frame("Datos de la Consulta", [
+            [sg.Text("ID Paciente", size=(15, 1)), sg.Input(key="-ID_PACIENTE-")],
+            [sg.Text("ID Doctor", size=(15, 1)), sg.Input(key="-ID_DOCTOR-")],
+            [sg.Text("Diagnóstico Provisional", size=(15, 1)), sg.Multiline(key="-DIAGNOSTICO-", size=(40, 3))],
+            [sg.Text("Tratamiento Prescrito", size=(15, 1)), sg.Multiline(key="-TRATAMIENTO-", size=(40, 3))],
+            [sg.Text("Observaciones", size=(15, 1)), sg.Multiline(key="-OBSERVACIONES-", size=(40, 3))],
+            [sg.Text("Estado de Consulta", size=(15, 1)), sg.Combo(["Abierta", "En proceso", "Cerrada"], key="-ESTADO-", default_value="Abierta")],
+        ])],
         [sg.Button("Guardar Consulta", size=(20, 1)), sg.Button("Volver", size=(20, 1))]
     ]
-    window = sg.Window("Formulario de Consulta", layout, size=(600, 500), finalize=True)
+    window = sg.Window("Formulario de Consulta", layout, size=(600, 500), element_justification='c', finalize=True)
     db = DatabaseManagerSingleton.get_instance()
 
     while True:

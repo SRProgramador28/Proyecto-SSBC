@@ -6,15 +6,15 @@ def doctores_interface():
 
     layout = [
         [sg.Text("Gestión de Doctores", font=("Helvetica", 20), justification='center')],
-        
-        [sg.Text("Nombre del Doctor", size=(20, 1)), sg.Input(key="-NOMBRE-", size=(30, 1))],
-        [sg.Text("Especialidad", size=(20, 1)), sg.Input(key="-ESPECIALIDAD-", size=(30, 1))],
-        [sg.Text("ID de Usuario Vinculado", size=(20, 1)), sg.Input(key="-ID-USUARIO-", size=(30, 1))],
-        
+        [sg.Frame("Datos del Doctor", [
+            [sg.Text("Nombre del Doctor", size=(20, 1)), sg.Input(key="-NOMBRE-", size=(30, 1))],
+            [sg.Text("Especialidad", size=(20, 1)), sg.Input(key="-ESPECIALIDAD-", size=(30, 1))],
+            [sg.Text("ID de Usuario Vinculado", size=(20, 1)), sg.Input(key="-ID-USUARIO-", size=(30, 1))],
+        ])],
         [sg.Button("Registrar Doctor", size=(20, 1)), sg.Button("Volver", size=(20, 1))]
     ]
     
-    window = sg.Window("Gestión de Doctores", layout, size=(600, 400), element_justification='c', finalize=True)
+    window = sg.Window("Gestión de Doctores", layout, size=(600, 500), element_justification='c', finalize=True)
     db = DatabaseManagerSingleton.get_instance()
 
     def buscar_usuario(id_usuario):

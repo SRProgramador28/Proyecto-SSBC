@@ -20,18 +20,18 @@ def cita_interface():
 
     layout = [
         [sg.Text("Registrar Nueva Cita", font=("Helvetica", 20), justification='center', expand_x=True)],
-        
-        [sg.Text("Paciente", size=(20, 1)), sg.Combo(list(pacientes.keys()), key="-PACIENTE-", size=(40, 1))],
-        [sg.Text("Doctor", size=(20, 1)), sg.Combo(list(doctores.keys()), key="-DOCTOR-", size=(40, 1))],
-        [sg.Text("Fecha de Cita", size=(20, 1)), sg.Input(default_text=datetime.today().strftime('%Y-%m-%d %H:%M:%S'), key="-FECHA-", size=(40, 1))],
-        [sg.Text("Motivo de la Cita", size=(20, 1)), sg.Multiline(key="-MOTIVO-", size=(40, 3))],
-        [sg.Text("Observaciones", size=(20, 1)), sg.Multiline(key="-OBSERVACIONES-", size=(40, 3))],
-        [sg.Text("Estado", size=(20, 1)), sg.Combo(["Pendiente", "Confirmada", "Cancelada", "Reprogramada", "Completada"], key="-ESTADO-", default_value="Pendiente")],
-        
+        [sg.Frame("Detalles", [
+            [sg.Text("Paciente", size=(20, 1)), sg.Combo(list(pacientes.keys()), key="-PACIENTE-", size=(40, 1))],
+            [sg.Text("Doctor", size=(20, 1)), sg.Combo(list(doctores.keys()), key="-DOCTOR-", size=(40, 1))],
+            [sg.Text("Fecha de Cita", size=(20, 1)), sg.Input(default_text=datetime.today().strftime('%Y-%m-%d %H:%M:%S'), key="-FECHA-", size=(40, 1))],
+            [sg.Text("Motivo de la Cita", size=(20, 1)), sg.Multiline(key="-MOTIVO-", size=(40, 3))],
+            [sg.Text("Observaciones", size=(20, 1)), sg.Multiline(key="-OBSERVACIONES-", size=(40, 3))],
+            [sg.Text("Estado", size=(20, 1)), sg.Combo(["Pendiente", "Confirmada", "Cancelada", "Reprogramada", "Completada"], key="-ESTADO-", default_value="Pendiente")], 
+        ])],
         [sg.Button("Registrar", size=(20, 1)), sg.Button("Volver", size=(20, 1))]
     ]
     
-    window = sg.Window("Registro de Citas", layout, size=(650, 600), finalize=True)
+    window = sg.Window("Registro de Citas", layout, size=(600, 500), element_justification='c', finalize=True)
 
     while True:
         event, values = window.read()

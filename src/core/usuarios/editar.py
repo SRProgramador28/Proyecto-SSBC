@@ -7,19 +7,21 @@ def editar_usuario_interface():
     
     layout = [
         [sg.Text("Editar Usuario", font=("Helvetica", 20))],
-
-        [sg.Text("Buscar por Usuario"), sg.Input(key="-USUARIO-", size=(30, 1)), sg.Button("Buscar")],
+        [sg.Frame("Buscar", [
+            [sg.Text("Buscar por Usuario"), sg.Input(key="-USUARIO-", size=(30, 1)), sg.Button("Buscar")],
+        ])],
         [sg.HorizontalSeparator()],
-        [sg.Text("Nombre"), sg.Input(key="-NOMBRE-", size=(30, 1), disabled=True)],
-        [sg.Text("Apellido"), sg.Input(key="-APELLIDO-", size=(30, 1), disabled=True)],
-        [sg.Text("Contraseña"), sg.Input(key="-PASSWORD-", password_char="*", size=(30, 1), disabled=True)],
-        [sg.Text("Rol"), sg.Combo(["Administrador", "Usuario"], key="-ROL-", disabled=True)],
-        [sg.Text("Estado"), sg.Combo(["Activo", "Inactivo"], key="-ESTADO-", disabled=True)],
-        [sg.Text("Fecha de Registro"), sg.Input(key="-FECHA_REGISTRO-", size=(30, 1), disabled=True)],
-        
+        [sg.Frame("Datos del Usuario", [
+            [sg.Text("Nombre"), sg.Input(key="-NOMBRE-", size=(30, 1), disabled=True)],
+            [sg.Text("Apellido"), sg.Input(key="-APELLIDO-", size=(30, 1), disabled=True)],
+            [sg.Text("Contraseña"), sg.Input(key="-PASSWORD-", password_char="*", size=(30, 1), disabled=True)],
+            [sg.Text("Rol"), sg.Combo(["Administrador", "Usuario"], key="-ROL-", disabled=True)],
+            [sg.Text("Estado"), sg.Combo(["Activo", "Inactivo"], key="-ESTADO-", disabled=True)],
+            [sg.Text("Fecha de Registro"), sg.Input(key="-FECHA_REGISTRO-", size=(30, 1), disabled=True)],
+        ])],
         [sg.Button("Guardar Cambios", size=(20, 1)), sg.Button("Volver", size=(20, 1))]
     ]
-    window = sg.Window("Editar Usuario", layout, size=(500, 400), finalize=True)
+    window = sg.Window("Editar Usuario", layout, size=(600, 500), element_justification='c', finalize=True)
     db = DatabaseManagerSingleton.get_instance()
     
     while True:

@@ -20,9 +20,11 @@ from usuarios.registro import crear_usuario_interface
 from usuarios.editar import editar_usuario_interface
 from usuarios.doctores import doctores_interface
 from usuarios.editar_doctores import editar_doctor_interface
+from usuarios.listar import listar_doctor_interface
 
 # Módulos de sistema de diagnóstico
 from sistema.consulta import consulta_interface
+from sistema.revision import revision_interface
 from sistema.pruebas_laboratorio import pruebas_laboratorio_interface
 from sistema.pruebas_postmortem import pruebas_postmortem_interface
 
@@ -45,10 +47,10 @@ def handle_login(window):
             db = DatabaseManagerSingleton.get_instance()
             filas = db.execute_query(query, (usercode, password))
             # Aquí iría la lógica de autenticación real
-            if usercode == "1" and password == "1":
+        if usercode == "1" and password == "1":
                 sg.popup("Bienvenido Admistrador")
                 return "main", main_interface()
-            elif filas:
+        elif filas:
                 sg.popup(f"Bienvenido Doctor {usercode}!")
                 return "main", main_interface()
             else:
@@ -78,7 +80,9 @@ def handle_main(window):
         "Editar Usuario": ("editar_usuario", editar_usuario_interface),
         "Nuevo Doctor": ("registrar_doctor", doctores_interface),
         "Editar Doctor": ("editar_doctor", editar_doctor_interface),
+        "Listar Doctores": ("listar_doctor", listar_doctor_interface),
         "Consulta": ("consulta", consulta_interface),
+        "Revisión": ("revision", revision_interface),
         "Pruebas de Laboratorio": ("pruebas_laboratorio", pruebas_laboratorio_interface),
         "Pruebas Post Mortem": ("pruebas_postmortem", pruebas_postmortem_interface),
     }
@@ -117,7 +121,9 @@ def main():
         "editar_usuario": lambda w: handle_generic(w, "main"),
         "registrar_doctor": lambda w: handle_generic(w, "main"),
         "editar_doctor": lambda w: handle_generic(w, "main"),
+        "listar_doctor": lambda w: handle_generic(w, "main"),
         "consulta": lambda w: handle_generic(w, "main"),
+        "revision": lambda w: handle_generic(w, "main"),
         "pruebas_laboratorio": lambda w: handle_generic(w, "main"),
         "pruebas_postmortem": lambda w: handle_generic(w, "main"),
     }
