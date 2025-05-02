@@ -69,7 +69,7 @@ def buscar_cita_interface():
                     WHERE p.id_paciente = %s
                     ORDER BY c.fecha_hora DESC
                 """
-                resultados = db.fetch_all(query, (criterio,))
+                resultados = db.fetch_all(query, (id_paciente,))
 
                 if resultados:
                     texto_resultado = ""
@@ -82,7 +82,7 @@ def buscar_cita_interface():
                                             f"Estado: {r['estado']}\n"
                                             f"{'-'*60}\n")
                 else:
-                    texto_resultado = "No se encontraron citas para ese paciente."
+                    texto_resultado = "No se encontraron citas para este paciente."
 
                 window["-RESULTADO-"].update(texto_resultado)
 
@@ -91,5 +91,3 @@ def buscar_cita_interface():
 
     window.close()
     db.close()
-
-

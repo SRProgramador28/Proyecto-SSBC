@@ -4,7 +4,7 @@ from database.singleton import DatabaseManagerSingleton
 # Definición de la interfaz para el historial médico
 def historial_interface():
     layout = [
-        [sg.Text("Historial Médico  de Pacientes", font=("Helvetica", 20), justification='center')],
+        [sg.Text("Historial Médico de Pacientes", font=("Helvetica", 20), justification='center')],
         [sg.Frame("Buscar Paciente", [
             [sg.Text("ID o Nombre del Paciente:"), sg.Input(key="-BUSCAR-", size=(30, 1)),
                 sg.Button("Buscar", key="-BUSCAR-BTN-")] 

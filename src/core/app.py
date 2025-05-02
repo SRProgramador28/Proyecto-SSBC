@@ -50,7 +50,7 @@ def handle_login(window):
             if usercode == "1" and password == "1":
                 sg.popup("Bienvenido Admistrador")
                 return "main", main_interface()
-            elif filas:
+        elif filas:
                 sg.popup(f"Bienvenido Doctor {usercode}!")
                 return "main", main_interface()
             else:

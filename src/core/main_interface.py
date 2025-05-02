@@ -5,7 +5,7 @@ def main_interface():
     layout = [
         # Primera fila con el texto y el botón de Cerrar Sesión en la parte superior derecha
         [
-            sg.Text("Sistema Experto de Diagnóstico", font=("Helvetica", 20), justification='center', expand_x=True),
+            sg.Text("Núcleo de Diagnóstico", font=("Helvetica", 20), justification='center', expand_x=True),
             sg.Push(),
             sg.Button("Cerrar Sesión", button_color=('white', '#FF5555'), size=(12, 1))
         ],
