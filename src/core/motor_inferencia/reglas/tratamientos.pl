@@ -9,10 +9,10 @@ tratamiento(hipertension, [antihipertensivos, dieta_baja_sodio, ejercicio]).
 tratamiento(diabetes, [insulina, dieta_control_glucemica, ejercicio]).
 tratamiento(dermatitis, [cremas_emolientes, corticoides_topicos, antihistaminicos]).
 tratamiento(gastritis, [antiacidos, inhibidores_bomba_protona, dieta_blanda]).
-tratamiento(colitis, [antinflamatorios_intestinales, probioticos, dieta_euqilibrada]).
+tratamiento(colitis, [antinflamatorios_intestinales, probioticos, dieta_equilibrada]).
 tratamiento(hepatitis, [antivirales, reposo, evitar_alcohol]).
 
-tratamiento(migraña, [analgesicos, triptanes, evitar_desencadenantes]).
+tratamiento(migrana, [analgesicos, triptanes, evitar_desencadenantes]).
 tratamiento(sinusitis, [descongestionantes, lavados_nasales, antibioticos_si_bacteriana]).
 tratamiento(faringitis, [analgesicos, gargaras_agua_sal, reposo]).
 tratamiento(amigdalitis, [antibioticos_si_bacteriana, analgesicos, reposo]).
@@ -27,8 +27,8 @@ tratamiento(artritis, [antiinflamatorios_no_esteroideos, fisioterapia, reposo_re
 tratamiento(osteoporosis, [calcio, vitamina_d, bisfosfonatos, ejercicio]).
 tratamiento(conjuntivitis, [colirios_antibioticos, antihistaminicos, higiene_ocular]).
 tratamiento(rinitis_alergica, [antihistaminicos, descongestionantes, evitar_alergenos]).
-tratamiento(insuficiencia_renal, [dieta_renal, diálisis, trasplante_renal]).
-tratamiento(litiasis_renal, [hidratacion_intensa, analgésicos, litotricia]).
+tratamiento(insuficiencia_renal, [dieta_renal, dialisis, trasplante_renal]).
+tratamiento(litiasis_renal, [hidratacion_intensa, analgesicos, litotricia]).
 
 tratamiento(dengue, [hidratacion, analgesicos_no_aspirina, reposo]).
 tratamiento(chikungunya, [analgesicos, antiinflamatorios, reposo]).
@@ -43,5 +43,5 @@ tratamiento(vph, [remocion_lesiones, vigilancia_cervical, vacuna_preventiva]).
 tratamiento(gonorrea, [ceftriaxona, azitromicina]).
 
 tratamiento(depresion, [psicoterapia, antidepresivos, ejercicio]).
-tratamiento(ansiedad, [psicoterapia, ansiolíticos, tecnicas_relajacion]).
+tratamiento(ansiedad, [psicoterapia, ansioliticos, tecnicas_relajacion]).
 tratamiento(estres, [tecnicas_relajacion, ejercicio, gestion_tiempo]).

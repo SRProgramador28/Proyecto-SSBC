@@ -10,7 +10,7 @@ enfermedad(dermatitis).
 enfermedad(gastritis).
 enfermedad(colitis).
 enfermedad(hepatitis).
-enfermedad(migraña).
+enfermedad(migrana).
 enfermedad(sinusitis).
 enfermedad(faringitis).
 enfermedad(amigdalitis).
@@ -65,7 +65,7 @@ tiene_sintomas(mono_infecciosa, [fatiga, fiebre, inflamacion_ganglios, dolor_gar
 tiene_sintomas(artritis, [dolor_articular, inflamacion, rigidez, dificultad_movimiento]).
 tiene_sintomas(osteoporosis, [fracturas, dolor_huesos, disminucion_estatura]).
 tiene_sintomas(conjuntivitis, [enrojecimiento, picazon, lagrimeo, secrecion_ocular]).
-tiene_sintomas(rinitis_alergica, [estornudos, picazon_nasal, congestión, escurrimiento_nasal]).
+tiene_sintomas(rinitis_alergica, [estornudos, picazon_nasal, congestion, escurrimiento_nasal]).
 tiene_sintomas(insuficiencia_renal, [fatiga, edemas, hipertension, cambios_orina]).
 tiene_sintomas(litiasis_renal, [dolor_abdominal, hematuria, nauseas, urgencia_miccion]).
 tiene_sintomas(dengue, [fiebre, dolor_muscular, dolor_articular, dolor_cabeza, erupcion_cutanea]).

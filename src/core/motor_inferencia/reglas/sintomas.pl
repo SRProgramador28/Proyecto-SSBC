@@ -1,4 +1,6 @@
 % Sintomas
+
+:- dynamic sintoma/1.
 sintoma(fiebre).
 sintoma(tos).
 sintoma(dificultad_respiratoria).
@@ -56,7 +58,7 @@ caracteristica(dolor_espalda, dolor_muscular).
 caracteristica(dolor_espalda, dolor_nervioso).
 caracteristica(dolor_abdominal, calambres).
 caracteristica(dolor_abdominal, dolor_pelvico).
-caracteristica(dolor_cabeza, migraña).
+caracteristica(dolor_cabeza, migrana).
 caracteristica(dolor_cabeza, tension).
 caracteristica(dolor_muscular, debilidad).
 caracteristica(dolor_muscular, rigidez).
@@ -64,7 +66,7 @@ caracteristica(dolor_articular, inflamacion).
 caracteristica(dolor_articular, rigidez).
 caracteristica(escalofrios, temblores).
 caracteristica(escalofrios, sudoracion).
-caracteristica(escurrimiento_nasal, congestión).
+caracteristica(escurrimiento_nasal, congestion).
 caracteristica(escurrimiento_nasal, picazon).
 caracteristica(mareos, vertigo).
 caracteristica(mareos, desmayo).
@@ -78,7 +80,7 @@ caracteristica(diarrea, deshidratacion).
 caracteristica(dolor_garganta, irritacion).
 caracteristica(dolor_garganta, ardor).
 caracteristica(inflamacion_amigdalas, hinchazon).
-caracteristica(dolor_oido, pulsatile).
+caracteristica(dolor_oido, pulsatil).
 caracteristica(dolor_oido, supuracion).
 caracteristica(irritacion_oido, picazon).
 caracteristica(disuria, ardor_al_orinar).
@@ -99,9 +101,9 @@ caracteristica(picazon_nasal, irritacion).
 caracteristica(edemas, retencion_liquidos).
 caracteristica(cambios_orina, color_alterado).
 caracteristica(hematuria, sangre_orina).
-caracteristica(dolor_articular, inflamación_localizada).
+caracteristica(dolor_articular, inflamacion_localizada).
 caracteristica(secrecion, flujo_excesivo).
 caracteristica(insomnio, dificultad_dormir).
 caracteristica(cambios_apetito, aumento_o_disminucion).
 caracteristica(palpitaciones, latidos_acelerados).
-caracteristica(tension_muscular, contracción_muscular).
+caracteristica(tension_muscular, contraccion_muscular).
