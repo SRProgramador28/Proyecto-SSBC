@@ -8,22 +8,28 @@ def editar_paciente_interface():
     layout = [
         [sg.Text("Editar Paciente", font=("Helvetica", 20))],
 
-        [sg.Text("Código del Paciente"), sg.Input(key="-CODE-", size=(20, 1)), sg.Button("Buscar")],
+        [sg.Frame("Buscar", [
+            [sg.Text("Código del Paciente"), sg.Input(key="-CODE-", size=(20, 1)), sg.Button("Buscar")]
+        ])],
+
         [sg.HorizontalSeparator()],
-        [sg.Text("Nombre"), sg.Input(key="-NAME-", size=(30, 1), disabled=True)],
-        [sg.Text("Apellido"), sg.Input(key="-LASTNAME-", size=(30, 1), disabled=True)],
-        [sg.Text("Edad"), sg.Input(key="-AGE-", size=(10, 1), disabled=True)],
-        [sg.Text("Sexo"), sg.Combo(["Masculino", "Femenino"], key="-SEX-", disabled=True)],
-        [sg.Text("Peso (kg)"), sg.Input(key="-WEIGHT-", size=(10, 1), disabled=True)],
-        [sg.Text("Altura (m)"), sg.Input(key="-HEIGHT-", size=(10, 1), disabled=True)],
-        [sg.Text("Grupo Sanguíneo"), sg.Combo(
-            ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], key="-BLOOD-", disabled=True)],
-        [sg.Text("Alergias"), sg.Multiline(key="-ALLERGIES-", size=(40, 3), disabled=True)],
-        [sg.Text("Enfermedades Crónicas"), sg.Multiline(key="-DISEASES-", size=(40, 3), disabled=True)],
+
+        [sg.Frame("Detalles del Paciente", [
+            [sg.Text("Nombre"), sg.Input(key="-NAME-", size=(30, 1), disabled=True)],
+            [sg.Text("Apellido"), sg.Input(key="-LASTNAME-", size=(30, 1), disabled=True)],
+            [sg.Text("Edad"), sg.Input(key="-AGE-", size=(10, 1), disabled=True)],
+            [sg.Text("Sexo"), sg.Combo(["Masculino", "Femenino"], key="-SEX-", disabled=True)],
+            [sg.Text("Peso (kg)"), sg.Input(key="-WEIGHT-", size=(10, 1), disabled=True)],
+            [sg.Text("Altura (m)"), sg.Input(key="-HEIGHT-", size=(10, 1), disabled=True)],
+            [sg.Text("Grupo Sanguíneo"), sg.Combo(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], key="-BLOOD-", disabled=True)],
+            [sg.Text("Alergias"), sg.Multiline(key="-ALLERGIES-", size=(40, 3), disabled=True)],
+            [sg.Text("Enfermedades Crónicas"), sg.Multiline(key="-DISEASES-", size=(40, 3), disabled=True)],
+        ])],
 
         [sg.Button("Guardar Cambios", size=(20, 1), disabled=True), sg.Button("Volver", size=(20, 1))]
     ]
-    window = sg.Window("Editar Información", layout, size=(600, 600), finalize=True)
+
+    window = sg.Window("Editar Información", layout, size=(600, 500), finalize=True)
     db = DatabaseManagerSingleton.get_instance()
     codigo = None
 

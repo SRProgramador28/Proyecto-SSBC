@@ -15,5 +15,9 @@ diagnostico_con_tratamiento(Enfermedad, Tratamientos) :-
     diagnostico(Enfermedad),
     tratamiento(Enfermedad, Tratamientos).
 
-
-
+% Gravedad y tipo de enfermedad
+diagnostico_completo(Enfermedad, Tratamientos, Gravedad, Tipo) :-
+    diagnostico(Enfermedad),
+    tratamiento(Enfermedad, Tratamientos),
+    gravedad_enfermedad(Enfermedad, Gravedad),
+    tipo_enfermedad(Enfermedad, Tipo).

@@ -8,18 +8,20 @@ def editar_cita_interface():
 
     layout = [
         [sg.Text("Modificar Cita", font=("Helvetica", 20), justification="center", expand_x=True)],
-        [sg.Text("Código de la Cita", size=(20, 1)), sg.Input(key="-CITA_ID-", size=(30, 1)), sg.Button("Buscar", size=(10,1))],
+        [sg.Frame("Buscar", [
+             [sg.Text("Código de la Cita", size=(20, 1)), sg.Input(key="-CITA_ID-", size=(30, 1)), sg.Button("Buscar", size=(10,1))],
+        ])],
         [sg.HorizontalSeparator()],
-        
-        [sg.Text("Fecha de Cita", size=(20, 1)), sg.Input(key="-FECHA-", size=(30, 1))],
-        [sg.Text("Motivo de la Cita", size=(20, 1)), sg.Multiline(key="-MOTIVO-", size=(40, 3))],
-        [sg.Text("Observaciones", size=(20, 1)), sg.Multiline(key="-OBSERVACIONES-", size=(40, 3))],
-        [sg.Text("Estado", size=(20, 1)), sg.Combo(["Pendiente", "Confirmada", "Cancelada", "Reprogramada", "Completada"], key="-ESTADO-", size=(30,1))],
-
+        [sg.Frame("Modificar Datos", [
+             [sg.Text("Fecha de Cita", size=(20, 1)), sg.Input(key="-FECHA-", size=(30, 1))],
+             [sg.Text("Motivo de la Cita", size=(20, 1)), sg.Multiline(key="-MOTIVO-", size=(40, 3))],
+             [sg.Text("Observaciones", size=(20, 1)), sg.Multiline(key="-OBSERVACIONES-", size=(40, 3))],
+             [sg.Text("Estado", size=(20, 1)), sg.Combo(["Pendiente", "Confirmada", "Cancelada", "Reprogramada", "Completada"], key="-ESTADO-", size=(30,1))],
+        ])],
         [sg.Button("Guardar Cambios", size=(20, 1)), sg.Button("Volver", size=(20, 1))]
     ]
 
-    window = sg.Window("Editar Cita", layout, size=(650, 550), finalize=True)
+    window = sg.Window("Editar Cita", layout, size=(600, 500), element_justification='c', finalize=True)
 
     cita_actual = None
 

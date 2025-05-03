@@ -4,18 +4,22 @@ from database.singleton import DatabaseManagerSingleton
 # Definición de la interfaz para las pruebas postmortem
 def pruebas_postmortem_interface():
     sg.theme('MyNewTheme')
+
     layout = [
         [sg.Text("Registro de Pruebas Postmortem", font=("Helvetica", 18))],
-        
-        [sg.Text("ID Consulta", size=(18, 1)), sg.Input(key="-ID_CONSULTA-")],
-        [sg.Text("Nombre de la Prueba", size=(18, 1)), sg.Input(key="-NOMBRE_PRUEBA-")],
-        [sg.Text("Fecha de Realización", size=(18, 1)), sg.Input(key="-FECHA-", size=(20, 1)), sg.CalendarButton("Seleccionar Fecha", target="-FECHA-", format="%Y-%m-%d")],
-        [sg.Text("Detalles", size=(18, 1)), sg.Multiline(key="-DETALLES-", size=(45, 5))],
-        [sg.Text("Prueba Realizada", size=(18, 1)), sg.Checkbox("", default=False, key="-REALIZADA-")],
+
+        [sg.Frame("Datos de la Prueba", [
+            [sg.Text("ID Consulta", size=(18, 1)), sg.Input(key="-ID_CONSULTA-")],
+            [sg.Text("Nombre de la Prueba", size=(18, 1)), sg.Input(key="-NOMBRE_PRUEBA-")],
+            [sg.Text("Fecha de Realización", size=(18, 1)), sg.Input(key="-FECHA-", size=(20, 1)), sg.CalendarButton("Seleccionar Fecha", target="-FECHA-", format="%Y-%m-%d")],
+            [sg.Text("Detalles", size=(18, 1)), sg.Multiline(key="-DETALLES-", size=(45, 5))],
+            [sg.Text("Prueba Realizada", size=(18, 1)), sg.Checkbox("", default=False, key="-REALIZADA-")],
+        ])],
 
         [sg.Button("Guardar Prueba", size=(20, 1)), sg.Button("Volver", size=(20, 1))]
     ]
-    window = sg.Window("Pruebas Postmortem", layout, size=(600, 400), finalize=True)
+
+    window = sg.Window("Pruebas Postmortem", layout, size=(600, 500), element_justification='c', finalize=True)
     db = DatabaseManagerSingleton.get_instance()
 
     while True:
@@ -42,7 +46,7 @@ def pruebas_postmortem_interface():
                     sg.popup("Error", f"No se encontró una consulta con ID {id_consulta}.")
                     continue
 
-                # Verificar prueba 
+                # Verificar prueba
                 prueba_query = "SELECT id_prueba_postmortem FROM pruebas_postmortem WHERE nombre_prueba = %s"
                 prueba_result = db.execute_query(prueba_query, (nombre_prueba,), fetch="one")
                 if not prueba_result:

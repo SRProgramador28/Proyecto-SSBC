@@ -4,39 +4,72 @@ from database.singleton import DatabaseManagerSingleton
 # Definición de la interfaz para buscar pacientes
 def buscar_paciente_interface():
     sg.theme('MyNewTheme')
-    layout = [
-        [sg.Text("Buscar", font=("Helvetica", 20), justification='center')],
-        [sg.Text("Nombre del Paciente:", size=(25, 1))],
-        [sg.Input(key="-BUSCAR-", size=(30, 1))],
-        [sg.Button("Buscar", size=(15, 1))],
-        [sg.Text("Resultado:", font=("Helvetica", 12))],
-        [sg.Multiline(key="-RESULTADO-", size=(60, 10), disabled=True)],
-        [sg.Button("Volver", size=(15, 1))]
-    ]
-    window = sg.Window("Buscar Paciente", layout, size=(600, 400), element_justification='c', finalize=True)
     
+    layout = [
+        [sg.Text("Buscar Paciente", font=("Helvetica", 20), justification='center')],
+
+        [sg.Frame("Buscar", [
+            [sg.Text("ID o Nombre del Paciente"), sg.Input(key="-BUSCAR-", size=(30, 1)), sg.Button("Buscar", key="-BUSCAR-BTN-")]
+        ])],
+
+        [sg.HorizontalSeparator()],
+
+        [sg.Frame("Detalles del Paciente", [
+            [sg.Text("Nombre"), sg.Input(key="-NAME-", size=(30, 1), disabled=True)],
+            [sg.Text("Apellido"), sg.Input(key="-LASTNAME-", size=(30, 1), disabled=True)],
+            [sg.Text("Edad"), sg.Input(key="-AGE-", size=(10, 1), disabled=True)],
+            [sg.Text("Sexo"), sg.Input(key="-SEX-", size=(10, 1), disabled=True)],
+            [sg.Text("Altura (m)"), sg.Input(key="-HEIGHT-", size=(10, 1), disabled=True)],
+            [sg.Text("Grupo Sanguíneo"), sg.Input(key="-BLOOD-", size=(10, 1), disabled=True)],
+            [sg.Text("Alergias"), sg.Multiline(key="-ALLERGIES-", size=(40, 3), disabled=True)],
+            [sg.Text("Enfermedades Crónicas"), sg.Multiline(key="-DISEASES-", size=(40, 3), disabled=True)],
+        ])],
+        
+        [sg.Button("Volver", size=(20, 1))]
+    ]
+
+    window = sg.Window("Buscar Paciente", layout, size=(600, 500), element_justification='c', finalize=True)
     db = DatabaseManagerSingleton.get_instance()
+
     while True:
         event, values = window.read()
         if event in (sg.WIN_CLOSED, "Volver"):
             break
-        elif event == "Buscar":
-            criterio = values["-BUSCAR-"]
+        elif event == "-BUSCAR-BTN-":
+            criterio = values["-BUSCAR-"].strip()
             if not criterio:
-                sg.popup("Error", "Por favor, ingrese el nombre del paciente.")
+                sg.popup("Error", "Por favor, ingrese el ID o Nombre del paciente.")
                 continue
 
-            # Consulta SQL
-            query = "SELECT * FROM pacientes WHERE nombre LIKE %s"
-            resultados = db.execute_query(query, params=(f"%{criterio}%",))
-
-            if resultados:
-                texto_resultado = "\n".join([
-                    f"ID: {r[0]} \nNombre: {r[1]} \nApellido: {r[2]} \nEdad: {r[3]} \nSexo: {r[4]} \nAltura: {r[6]} \nGrupo Sanguineo: {r[7]} \nAlergias: {r[8]} \nEnfermedades Cronicas: {r[9]}"
-                for r in resultados])
+            if criterio.isdigit():
+                query = """
+                    SELECT id_paciente, nombre, apellido, edad, sexo, direccion, altura, grupo_sanguineo, alergias, enfermedades_cronicas
+                    FROM pacientes WHERE id_paciente = %s
+                """
+                resultado = db.execute_query(query, (criterio,), fetch="one")
             else:
-                texto_resultado = "No se encontraron pacientes con ese nombre."
-            window["-RESULTADO-"].update(texto_resultado)
+                query = """
+                    SELECT id_paciente, nombre, apellido, edad, sexo, direccion, altura, grupo_sanguineo, alergias, enfermedades_cronicas 
+                    FROM pacientes 
+                    WHERE CONCAT(nombre, ' ', apellido) LIKE %s 
+                    LIMIT 1
+                """
+                resultado = db.execute_query(query, (f"%{criterio}%",), fetch="one")
+
+            if resultado:
+                r = resultado
+                window["-NAME-"].update(r[1])
+                window["-LASTNAME-"].update(r[2])
+                window["-AGE-"].update(str(r[3]))
+                window["-SEX-"].update(r[4])
+                window["-HEIGHT-"].update(str(r[6]) if r[6] else "")
+                window["-BLOOD-"].update(r[7] if r[7] else "")
+                window["-ALLERGIES-"].update(r[8] if r[8] else "")
+                window["-DISEASES-"].update(r[9] if r[9] else "")
+            else:
+                sg.popup("Paciente no encontrado.")
+                for key in ("-NAME-", "-LASTNAME-", "-AGE-", "-SEX-", "-HEIGHT-", "-BLOOD-", "-ALLERGIES-", "-DISEASES-"):
+                    window[key].update("")
 
     window.close()
     db.close()

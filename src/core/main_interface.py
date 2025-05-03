@@ -31,9 +31,10 @@ def main_interface():
                         [sg.Button("Nuevo Usuario", expand_x=True)],
                         [sg.Button("Editar Usuario", expand_x=True)],
                         [sg.Button("Nuevo Doctor", expand_x=True)],
-                        [sg.Button("Editar Doctor", expand_x=True)]
+                        [sg.Button("Editar Doctor", expand_x=True)],
+                        [sg.Button("Listar Doctores", expand_x=True)]
                     ], expand_x=True, expand_y=True),
-                    
+
                     sg.Tab("Sistema de Diagnóstico", [
                         [sg.Button("Consulta", expand_x=True)],
                         [sg.Button("Revisión", expand_x=True)],
