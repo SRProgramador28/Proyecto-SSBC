@@ -183,3 +183,47 @@ SELECT
 FROM consultas c
 JOIN pacientes p ON c.id_paciente = p.id_paciente
 JOIN doctores d ON c.id_doctor = d.id_doctor;
+
+-- Vista de Citas Médicas
+CREATE VIEW vista_citas AS
+SELECT 
+    c.id_cita,
+    c.fecha_hora,
+    c.motivo,
+    c.estado,
+    c.observaciones,
+    c.fecha_creacion,
+    p.id_paciente,
+    CONCAT(p.nombre, ' ', p.apellido) AS nombre_completo_paciente,
+    p.edad,
+    p.sexo,
+    d.id_doctor,
+    d.nombre AS nombre_doctor,
+    d.especialidad
+FROM citas c
+JOIN pacientes p ON c.id_paciente = p.id_paciente
+JOIN doctores d ON c.id_doctor = d.id_doctor
+ORDER BY c.fecha_hora;
+
+-- Vista de Pruebas de Laboratorio
+CREATE VIEW vista_pruebas_laboratorio AS
+SELECT 
+    cpl.id_consulta,
+    cpl.id_prueba_laboratorio,
+    pl.nombre_prueba,
+    pl.descripcion,
+    cpl.resultado,
+    cpl.realizada,
+    cpl.fecha_realizacion,
+    c.id_paciente,
+    CONCAT(p.nombre, ' ', p.apellido) AS nombre_paciente,
+    c.id_doctor,
+    d.nombre AS nombre_doctor,
+    d.especialidad,
+    c.fecha_consulta
+FROM consulta_prueba_laboratorio cpl
+JOIN pruebas_laboratorio pl ON cpl.id_prueba_laboratorio = pl.id_prueba_laboratorio
+JOIN consultas c ON cpl.id_consulta = c.id_consulta
+JOIN pacientes p ON c.id_paciente = p.id_paciente
+JOIN doctores d ON c.id_doctor = d.id_doctor
+ORDER BY cpl.fecha_realizacion DESC;

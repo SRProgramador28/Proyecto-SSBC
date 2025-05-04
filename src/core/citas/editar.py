@@ -11,57 +11,84 @@ def editar_cita_interface():
         [sg.Frame("Buscar", [
              [sg.Text("Código de la Cita", size=(20, 1)), sg.Input(key="-CITA_ID-", size=(30, 1)), sg.Button("Buscar", size=(10,1))],
         ])],
+
         [sg.HorizontalSeparator()],
+
+        [sg.Frame("Información de la Cita", [
+                [sg.Text("Paciente", size=(20, 1)), sg.Text(key="-INFO_PACIENTE-", size=(30, 1))],
+                [sg.Text("Doctor", size=(20, 1)), sg.Text(key="-INFO_DOCTOR-", size=(30, 1))],
+        ])],
+
         [sg.Frame("Modificar Datos", [
              [sg.Text("Fecha de Cita", size=(20, 1)), sg.Input(key="-FECHA-", size=(30, 1))],
              [sg.Text("Motivo de la Cita", size=(20, 1)), sg.Multiline(key="-MOTIVO-", size=(40, 3))],
              [sg.Text("Observaciones", size=(20, 1)), sg.Multiline(key="-OBSERVACIONES-", size=(40, 3))],
              [sg.Text("Estado", size=(20, 1)), sg.Combo(["Pendiente", "Confirmada", "Cancelada", "Reprogramada", "Completada"], key="-ESTADO-", size=(30,1))],
         ])],
+
         [sg.Button("Guardar Cambios", size=(20, 1)), sg.Button("Volver", size=(20, 1))]
     ]
 
     window = sg.Window("Editar Cita", layout, size=(600, 500), element_justification='c', finalize=True)
-
     cita_actual = None
 
     while True:
         event, values = window.read()
+
         if event in (sg.WIN_CLOSED, "Volver"):
             break
 
         elif event == "Buscar":
-            cita_id = values["-CITA_ID-"]
+            cita_id = values["-CITA_ID-"].strip()
             if not cita_id:
                 sg.popup("Ingrese el código de la cita para buscar.")
                 continue
 
             try:
-                query = "SELECT * FROM citas WHERE id_cita = %s"
-                result = db.fetch_one(query, (cita_id,))
-                if result:
-                    cita_actual = result
-                    window["-FECHA-"].update(value=result['fecha_hora'].strftime('%Y-%m-%d %H:%M:%S'))
-                    window["-MOTIVO-"].update(value=result['motivo'] or "")
-                    window["-OBSERVACIONES-"].update(value=result['observaciones'] or "")
-                    window["-ESTADO-"].update(value=result['estado'])
+                query = """
+                SELECT id_cita, fecha_hora, motivo, observaciones, estado, nombre_completo_paciente, nombre_doctor, especialidad
+                FROM vista_citas
+                WHERE id_cita = %s
+                """
+                resultado = db.execute_query(query, (cita_id,),  fetch="one")
+
+                if resultado:
+                    cita_actual = resultado[0]
+
+                    fecha_hora = resultado[1]
+                    if isinstance(fecha_hora, str):
+                        window["-FECHA-"].update(value=fecha_hora)
+                    else:
+                        window["-FECHA-"].update(value=fecha_hora.strftime("%Y-%m-%d %H:%M"))
+
+                    window["-MOTIVO-"].update(value=resultado[2] or "")
+                    window["-OBSERVACIONES-"].update(value=resultado[3] or "")
+                    window["-ESTADO-"].update(value=resultado[4])
+
+                    window["-INFO_PACIENTE-"].update(value=resultado[5])
+                    window["-INFO_DOCTOR-"].update(value=f"{resultado[6]} ({resultado[7]})")
                 else:
-                    sg.popup("No se encontró una cita con ese código.")
+                    sg.popup("Cita no encontrada.")
+                    
+                    for key in ["-FECHA-", "-MOTIVO-", "-OBSERVACIONES-", "-ESTADO-", "-INFO_PACIENTE-", "-INFO_DOCTOR-"]:
+                        window[key].update(value="")
+                    cita_actual = None
+
             except Exception as e:
                 sg.popup_error(f"Error al buscar la cita: {e}")
-
+                
         elif event == "Guardar Cambios":
             if not cita_actual:
-                sg.popup("Primero busque una cita para modificar.")
+                sg.popup("No hay cita seleccionada para modificar.")
                 continue
 
-            nueva_fecha = values["-FECHA-"]
-            nuevo_motivo = values["-MOTIVO-"]
-            nuevas_observaciones = values["-OBSERVACIONES-"]
+            nueva_fecha = values["-FECHA-"].strip()
+            nuevo_motivo = values["-MOTIVO-"].strip()
+            nuevas_observaciones = values["-OBSERVACIONES-"].strip()
             nuevo_estado = values["-ESTADO-"]
 
-            if not all([nueva_fecha, nuevo_estado]):
-                sg.popup("Debe llenar los campos obligatorios (Fecha y Estado).")
+            if not nueva_fecha or not nuevo_estado:
+                sg.popup("Por favor, complete todos los campos obligatorios.")
                 continue
 
             try:
@@ -70,17 +97,23 @@ def editar_cita_interface():
                 SET fecha_hora = %s, motivo = %s, observaciones = %s, estado = %s
                 WHERE id_cita = %s
                 """
-                filas = db.execute_query(update_query, (
-                    nueva_fecha, nuevo_motivo, nuevas_observaciones, nuevo_estado, cita_actual['id_cita']
-                ))
-                if filas:
-                    sg.popup("Cita actualizada exitosamente.", title="Éxito")
-                    # Limpiar formulario después de guardar
-                    for key in ("-CITA_ID-", "-FECHA-", "-MOTIVO-", "-OBSERVACIONES-", "-ESTADO-"):
-                        window[key].update("")
-                    cita_actual = None
+                db.execute_query(update_query, (
+                    nueva_fecha,
+                    nuevo_motivo,
+                    nuevas_observaciones,
+                    nuevo_estado,
+                    cita_actual
+                ), fetch="none")
+
+                sg.popup("Cita modificada exitosamente.", title="Éxito")
+
+                for key in ["-FECHA-", "-MOTIVO-", "-OBSERVACIONES-", "-ESTADO-", "-INFO_PACIENTE-", "-INFO_DOCTOR-"]:
+                    window[key].update("")
+                cita_actual = None
+
             except Exception as e:
                 sg.popup_error(f"Error al actualizar la cita: {e}")
+
 
     window.close()
     db.close()

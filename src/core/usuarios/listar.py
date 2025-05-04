@@ -27,7 +27,7 @@ def listar_doctor_interface():
 
             if resultados:
                 texto_resultado = "\n".join([
-                    f"\n\nID: {r[0]} \nNombre: {r[1]} \nApellido: {r[2]} \nEdad: {r[3]} \nSexo: {r[4]} \nAltura: {r[6]} \nGrupo Sanguineo: {r[7]} \nAlergias: {r[8]} \nEnfermedades Cronicas: {r[9]}"
+                    f"\nID: {r[0]} \nNombre: {r[1]} \nEspecialidad: {r[2]}"
                     for r in resultados])
             else:
                 texto_resultado = "No se encontraron doctores."

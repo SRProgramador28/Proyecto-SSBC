@@ -10,7 +10,7 @@ def revision_interface():
         [sg.Text("Sistema de Diagnóstico Automático", font=("Helvetica", 20), justification='center', expand_x=True)],
 
         [sg.Frame("Ingresar Síntomas", [
-            [sg.Text("Síntomas (separados por comas):", size=(25, 1)), sg.Input(key="-SINTOMAS-", size=(50, 1))],
+            [sg.Text("Síntomas (separados por comas):", size=(25, 1)), sg.Input(key="-SINTOMAS-", size=(40, 1))],
             [sg.Button("Diagnosticar", size=(15, 1))]
         ])],
 

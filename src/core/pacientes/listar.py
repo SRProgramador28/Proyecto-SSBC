@@ -33,7 +33,7 @@ def listar_paciente_interface():
                     for r in resultados])
             else:
                 texto_resultado = "No se encontraron pacientes."
-            window["-LISTADO-"].update(texto_resultado)
+            window["-PACIENTES-"].update(texto_resultado)
 
     window.close()
     db.close()

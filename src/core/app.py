@@ -39,10 +39,13 @@ def handle_login(window):
         
         if not all([usercode, password]):
             sg.popup("Error", "Por favor, complete los campos obligatorios.")
+            return "login", window
+        
         try:
             # Consulta a la base de datos para verificar el usuario y la contraseña
             query = """
-            SELECT * FROM usuarios WHERE usuario = %s AND password = %s
+            SELECT id_usuario, nombre, rol FROM usuarios
+            WHERE usuario = %s AND password = %s AND estado = 'Activo'
             """
             db = DatabaseManagerSingleton.get_instance()
             filas = db.execute_query(query, (usercode, password))
@@ -50,8 +53,11 @@ def handle_login(window):
             if usercode == "1" and password == "1":
                 sg.popup("Bienvenido Admistrador")
                 return "main", main_interface()
-        elif filas:
-                sg.popup(f"Bienvenido Doctor {usercode}!")
+            elif filas:
+                usuario = filas[0]
+                nombre = usuario[1]
+
+                sg.popup(f"Bienvenido Dr. {nombre}!")
                 return "main", main_interface()
             else:
                 sg.popup("Error", "Usuario o contraseña incorrectos.")
