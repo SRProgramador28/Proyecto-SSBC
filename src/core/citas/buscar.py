@@ -30,14 +30,13 @@ def buscar_cita_interface():
                 if resultado:
                     return resultado[0][0]
                 
-            # Buscar por nombre
-            query = """
-            SELECT id_paciente FROM pacientes
-            WHERE CONCAT(nombre, ' ', apellido) LIKE %s
-            LIMIT 1
-            """
-            resultado = db.execute_query(query, (f"%{criterio}%",))
-                resultado = db.execute_query(query, (criterio,), fetch="one")
+                # Buscar por nombre
+                query = """
+                SELECT id_paciente FROM pacientes
+                WHERE CONCAT(nombre, ' ', apellido) LIKE %s
+                LIMIT 1
+                """
+                resultado = db.execute_query(query, (f"%{criterio}%",))
             else:
                 # Buscar por nombre
                 query = """
@@ -48,8 +47,7 @@ def buscar_cita_interface():
                 resultado = db.execute_query(query, (f"%{criterio}%",), fetch="one")
 
             if resultado:
-                return resultado[0][0]  
-                    return resultado[0]
+                return resultado[0]
             return None
         except Exception as e:
             sg.popup(f"Error al obtener ID del paciente: {e}")

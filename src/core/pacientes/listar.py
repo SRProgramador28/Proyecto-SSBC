@@ -12,7 +12,7 @@ def listar_paciente_interface():
             [sg.Multiline(key="-PACIENTES-", size=(80, 18), disabled=True)]
         ])],
 
-        [sg.Button("Listar", size=(15, 1)), [sg.Button("Volver", size=(15, 1))]
+        [sg.Button("Listar", size=(15, 1)), [sg.Button("Volver", size=(15, 1))]]
     ]
 
     window = sg.Window("Listar Pacientes", layout, size=(600, 500), element_justification='c', finalize=True)

@@ -24,7 +24,7 @@ def buscar_paciente_interface():
             [sg.Text("Alergias"), sg.Multiline(key="-ALLERGIES-", size=(40, 3), disabled=True)],
             [sg.Text("Enfermedades Crónicas"), sg.Multiline(key="-DISEASES-", size=(40, 3), disabled=True)],
         ])],
-
+        
         [sg.Button("Volver", size=(20, 1))]
     ]
 
@@ -43,15 +43,16 @@ def buscar_paciente_interface():
 
             if criterio.isdigit():
                 query = """
-                    SELECT * FROM pacientes WHERE id_paciente = %s
+                SELECT id_paciente, nombre, apellido, edad, sexo, direccion, altura, grupo_sanguineo, alergias, enfermedades_cronicas
+                FROM pacientes WHERE id_paciente = %s
                 """
                 resultado = db.execute_query(query, (criterio,), fetch="one")
             else:
                 query = """
-                    SELECT * 
-                    FROM pacientes 
-                    WHERE CONCAT(nombre, ' ', apellido) LIKE %s 
-                    LIMIT 1
+                SELECT id_paciente, nombre, apellido, edad, sexo, direccion, altura, grupo_sanguineo, alergias, enfermedades_cronicas 
+                FROM pacientes 
+                WHERE CONCAT(nombre, ' ', apellido) LIKE %s 
+                LIMIT 1
                 """
                 resultado = db.execute_query(query, (f"%{criterio}%",), fetch="one")
 
