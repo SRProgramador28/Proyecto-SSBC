@@ -36,7 +36,7 @@ def main_interface():
                     ], expand_x=True, expand_y=True),
 
                     sg.Tab("Sistema de Diagnóstico", [
-                        [sg.Button("Consulta", expand_x=True)],
+                        #[sg.Button("Consulta", expand_x=True)],
                         [sg.Button("Revisión", expand_x=True)],
                         [sg.Button("Pruebas de Laboratorio", expand_x=True)],
                         [sg.Button("Pruebas Post Mortem", expand_x=True)]

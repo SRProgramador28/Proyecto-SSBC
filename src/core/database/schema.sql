@@ -227,3 +227,26 @@ JOIN consultas c ON cpl.id_consulta = c.id_consulta
 JOIN pacientes p ON c.id_paciente = p.id_paciente
 JOIN doctores d ON c.id_doctor = d.id_doctor
 ORDER BY cpl.fecha_realizacion DESC;
+
+-- Vista de Pruebas Postmortem
+CREATE VIEW vista_pruebas_postmortem AS
+SELECT 
+    cpp.id_consulta,
+    cpp.id_prueba_postmortem,
+    pp.nombre_prueba,
+    pp.descripcion,
+    cpp.detalles,
+    cpp.realizada,
+    cpp.fecha_realizacion,
+    c.id_paciente,
+    CONCAT(p.nombre, ' ', p.apellido) AS nombre_paciente,
+    c.id_doctor,
+    d.nombre AS nombre_doctor,
+    d.especialidad,
+    c.fecha_consulta
+FROM consulta_prueba_postmortem cpp
+JOIN pruebas_postmortem pp ON cpp.id_prueba_postmortem = pp.id_prueba_postmortem
+JOIN consultas c ON cpp.id_consulta = c.id_consulta
+JOIN pacientes p ON c.id_paciente = p.id_paciente
+JOIN doctores d ON c.id_doctor = d.id_doctor
+ORDER BY cpp.fecha_realizacion DESC;
